@@ -19,6 +19,11 @@ export function getFriendlyErrorMessage(error: unknown, context: string): string
         rawMessage = String(error);
     }
 
+    // Check for specific Quota Exceeded error (429) from Gemini API
+    if (rawMessage.includes('"code":429') || rawMessage.includes('RESOURCE_EXHAUSTED')) {
+        return `Too many requests have been sent in a short period. Please wait about a minute and try again.`;
+    }
+
     // Check for specific unsupported MIME type error from Gemini API
     if (rawMessage.includes("Unsupported MIME type")) {
         try {

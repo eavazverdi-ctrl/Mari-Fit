@@ -88,15 +88,12 @@ const model = 'gemini-2.5-flash-image-preview';
 export const generateModelImage = async (userImage: File): Promise<string> => {
     const ai = getInitializedAi();
     const userImagePart = await fileToPart(userImage);
-    const prompt = `Objective: Transform the person in the image into a photorealistic, athletic version of themselves, posed in a 3/4 view with studio lighting, while preserving their identity.
-
-Key Instructions:
-1.  **Identity:** Do NOT alter the subject's face or hair.
-2.  **Pose:** Change to a natural 3/4 view. One leg should be slightly bent. Subject must look at the camera.
-3.  **Physique:** Refine the body to an 'amateur athletic' build. Remove visible excess fat from the abdomen and legs. The stomach must be flat and toned. This must look natural, not like a bodybuilder.
-4.  **Lighting:** Isolate the subject, subtly darken the original background, and apply soft, warm 3-point studio lighting to the subject only.
-5.  **Abdomen Rule:** The subject's abdomen MUST be visible. If their top covers it, crop the top to end just under the bust. If the abdomen is already visible, do not alter the top.
-6.  **Output:** Return ONLY the final, photorealistic image.`;
+    const prompt = `Objective: From the input image, create a photorealistic, athletic version of the person.
+**CRITICAL RULES:**
+1.  **Identity:** The subject's face and hair MUST remain unchanged. Preserve their identity.
+2.  **Physique:** Refine the body to a natural, amateur athletic build with a flat, toned stomach.
+3.  **Pose & Lighting:** Re-pose the subject in a natural 3/4 view with soft studio lighting.
+4.  **Output:** Return ONLY the final image.`;
     const response = await ai.models.generateContent({
         model,
         contents: { parts: [userImagePart, { text: prompt }] },
