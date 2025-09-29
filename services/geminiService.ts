@@ -83,7 +83,8 @@ const handleApiResponse = (response: GenerateContentResponse): string => {
     throw new Error(errorMessage);
 };
 
-const model = 'gemini-2.5-flash-image-preview';
+// Use the standard gemini-2.5-flash model for a more generous rate limit.
+const model = 'gemini-2.5-flash';
 
 export const generateModelImage = async (userImage: File): Promise<string> => {
     const ai = getInitializedAi();
