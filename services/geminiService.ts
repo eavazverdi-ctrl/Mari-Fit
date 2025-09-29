@@ -5,8 +5,11 @@
 
 import { GoogleGenAI, GenerateContentResponse, Modality } from "@google/genai";
 
-// Safely get the API key from the environment to prevent crashing on load.
-const API_KEY = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
+// Safely get the API key from Vite's environment variables.
+// FIX: Cast `import.meta` to `any` to access the `env` property. Vite exposes environment variables
+// on `import.meta.env`, but TypeScript doesn't know about it without proper configuration
+// (e.g., including `vite/client` in tsconfig).
+const API_KEY = (import.meta as any).env.VITE_API_KEY;
 
 let ai: GoogleGenAI | null;
 
@@ -15,7 +18,7 @@ if (API_KEY) {
 } else {
     ai = null;
     // Log an error to the console for developers. The user will see a UI error on API call.
-    console.error("API key not found. Please set the API_KEY environment variable.");
+    console.error("API key not found. Please set the VITE_API_KEY environment variable.");
 }
 
 /**
